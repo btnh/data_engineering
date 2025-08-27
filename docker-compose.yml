@@ -28,7 +28,7 @@ services:
     depends_on:
       - kafka
     environment:
-      - SENSOR_HOSTNAME=Android.fritz.box
+      - SENSOR_HOSTNAME=
 
   subscriber:
     build: ./subscriber
