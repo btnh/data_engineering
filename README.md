@@ -16,6 +16,39 @@ The provided streaming data pipeline was designed to work with minimal human int
 ## Usage
 - Build the container images and start all services with `docker compose up --build -d`
 - Verify operation of the publisher with `docker compose logs -f publisher`
+```bash
+Example output:
+publisher-1  | Kafka broker at kafka:9092 not available. Retrying in 5 seconds...
+publisher-1  | Kafka broker at kafka:9092 not available. Retrying in 5 seconds...
+publisher-1  | Kafka broker at kafka:9092 not available. Retrying in 5 seconds...
+publisher-1  | Kafka producer connected.
+publisher-1  | Publisher script starting...
+publisher-1  | SENSOR_HOSTNAME environment variable set to 'Android.fritz.box'. Bypassing Zeroconf discovery.
+publisher-1  | Attempting to connect to SensorServer at ws://Android.fritz.box:8080/sensor/connect?type=android.sensor.accelerometer
+publisher-1  | WebSocket connection opened.
+publisher-1  | Sent to Kafka: {'values': [0.0049500004, -0.24495001, 9.876], 'timestamp': 2954659628160233, 'accuracy': 3}
+publisher-1  | Sent to Kafka: {'values': [-0.003, -0.24300002, 9.868951], 'timestamp': 2954659708447579, 'accuracy': 3}
+publisher-1  | Sent to Kafka: {'values': [0.003, -0.23805001, 9.876], 'timestamp': 2954659788727924, 'accuracy': 3}
+```
 - Verify operation of the subscriber with `docker compose logs -f subscriber`
+```bash
+Example output:
+subscriber-1  | Subscriber service starting...
+subscriber-1  | Kafka broker at kafka:9092 not available. Retrying in 5 seconds...
+subscriber-1  | Kafka broker at kafka:9092 not available. Retrying in 5 seconds...
+subscriber-1  | Kafka broker at kafka:9092 not available. Retrying in 5 seconds...
+subscriber-1  | Kafka consumer connected.
+subscriber-1  | Attempting to connect to MongoDB...
+subscriber-1  | MongoDB client connected.
+subscriber-1  | Listening for messages on Kafka topic 'sensor-data'...
+```
+- Access the stored accelerometer data with :
+```bash
+docker compose exec mongodb mongosh
+use admin
+db.auth('root', 'example')
+use sensordata
+db.accelerometer.find().limit(5).pretty()
+```
 - Stop all the running containers without deleting any data with `docker compose down`
-- Stop the services AND delete all the sensor data stored in MongoDB with `docker compose down -v`
+- Stop the running containers AND delete all the sensor data stored in MongoDB with `docker compose down -v`
