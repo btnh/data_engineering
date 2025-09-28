@@ -6,7 +6,7 @@ from kafka.errors import NoBrokersAvailable
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
-KAFKA_TOPIC = "sensor-data"
+KAFKA_TOPIC = "sensor_data"
 KAFKA_BROKER = "kafka:9092"
 MONGO_HOST = "mongodb"
 MONGO_PORT = 27017
